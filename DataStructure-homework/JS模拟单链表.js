@@ -9,6 +9,7 @@
   创建链表：init(arg1, arg2, arg3, arg4...)
   获取长度：length()
   打印链表：toString()
+  有序合并两个有序链表（不会影响到原链表）： concat（linkList）
 */
 
 class Node {
@@ -120,6 +121,7 @@ class Node {
     return len;
   }
 
+  // 打印链表
   toString() {
     let nodeList = this;
     let str = '';
@@ -132,14 +134,36 @@ class Node {
     }
     return str;
   }
+
+  // 有序合并两个有序链表（不会影响到原链表）
+  concat(l2) {
+    let newList = new Node();
+    let cur = newList;
+    let l1 = this.next;
+    l2 = l2.next;
+    while(l1 || l2) {
+      let newNode = new Node();
+      if(l2 === null || (l1 !== null && l1.data <= l2.data)) {
+        newNode.data = l1.data;
+        newNode.next = null;
+        l1 = l1.next;
+      }
+      else if(l1 === null || (l2 !== null && l2.data < l1.data)) {
+        newNode.data = l2.data;
+        newNode.next = null;
+        l2 = l2.next;
+      }
+      cur.next = newNode;
+      cur = cur.next;
+    }
+    return newList;
+  }
 }
-// 导出 Node
+
 module.exports = Node
 
-// let node = new Node();    // 头节点
-// node.insert(1, 10);
-// node.init(1, 2, 3, 8, 5);
-// node.insert(2, 20);
-// node.remove(1);
-// node.modify(1, 30);
-// console.log(node);
+let linkList = new Node();    // 头节点
+linkList.init(-2,5);
+let linkList1 = new Node();
+linkList1.init(-9,-6,-3,-1,1,6);
+console.log(linkList.concat(linkList1).toString());
