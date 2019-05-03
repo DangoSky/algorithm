@@ -34,7 +34,29 @@ var isPalindrome = function(head) {
   return arr.join('') ===  arr.reverse().join('');
 };
 
+// 双向链表
+var isPalindrome = function(head) {
+  let pre = null;
+  let cur = head;
+  while(cur) {
+    cur.pre = pre;
+    pre = cur;
+    cur = cur.next;
+  }
+  let tail = pre;
+  cur = head;
+  while(cur) {
+    if(cur.val !== tail.val) {
+      return false;
+    }
+    cur = cur.next;
+    tail = tail.pre;
+  }
+  return true;
+};
+
 // 翻转链表
+// 理论上这个方法可行，但使用 JSON.parse(JSON.stringify(head))报了栈溢出，不知道为什么
 var isPalindrome = function(head) {
   function reverse(head) {
     let pre = null;
