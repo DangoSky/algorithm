@@ -23,6 +23,7 @@
  * @param {ListNode} head
  * @return {boolean}
  */
+
 // 数组缓存 + reverse
 var isPalindrome = function(head) {
   let arr = [];
@@ -69,6 +70,7 @@ var isPalindrome = function(head) {
     }
     return pre;
   }
+  // 需要深拷贝一份，否则翻转的时候会影响到原链表
   let before = JSON.parse(JSON.stringify(head));
   let rever = reverse(head);
   while(before) {
@@ -76,6 +78,38 @@ var isPalindrome = function(head) {
       return false;
     }
     before = before.next;
+    rever = rever.next;
+  }
+  return true;
+};
+
+// 先深拷贝再翻转链表
+var isPalindrome = function(head) {
+  // 深拷贝链表
+  function clone(head) {
+    if(head === null)  return null;
+    let ans = new ListNode(head.val);
+    ans.next = clone(head.next);
+    return ans;
+  }
+  // 翻转链表
+  function reverse(head) {
+    let pre = null;
+    let cur = head;
+    while(cur) {
+      let temp = cur.next;
+      cur.next = pre;
+      pre = cur;
+      cur = temp;
+    }
+    return pre;
+  }
+  let rever = reverse(clone(head));
+  while(head) {
+    if(head.val !== rever.val) {
+      return false;
+    }
+    head = head.next;
     rever = rever.next;
   }
   return true;
