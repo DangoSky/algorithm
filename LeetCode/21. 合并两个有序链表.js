@@ -14,50 +14,24 @@
  * @return {ListNode}
  */
 
-// 有序排列两个链表（在 原链表 的基础上改）
+// 递归
 var mergeTwoLists = function(l1, l2) {
-  function ListNode(val) {
-    this.val = val;
-    this.next = null;
+  if(!l1)  return l2;
+  if(!l2)  return l1;
+  let ans = new ListNode();
+  if(l1.val <= l2.val) {
+    ans.val = l1.val;
+    ans.next = mergeTwoLists(l1.next, l2);
   }
-  let ans = JSON.parse(JSON.stringify(l1));
-  if(ans === null) {
-      return l2;
-  }
-  let cur = ans;
-  while(l2) {
-      let node = new ListNode();
-      if(cur.val >= l2.val) {
-           node.val = cur.val;
-           node.next = cur.next;
-           cur.val = l2.val;
-           cur.next = node;
-           l2 = l2.next;
-      }
-      else if(cur.next && l2.val <= cur.next.val) {
-              node.val = l2.val;
-              node.next = cur.next;
-              cur.next = node;
-              l2 = l2.next;
-      }
-      else if(!cur.next) {
-              node.val = l2.val;
-              node.next = null;
-              cur.next = node;
-              l2 = l2.next;
-              continue;
-      }
-      cur = cur.next;
+  else {
+    ans.val = l2.val;
+    ans.next = mergeTwoLists(l1, l2.next);
   }
   return ans;
-};
+}
 
-// 有序排列两个链表（不会影响到原链表）
+// 建立一个新链表，循环的次数是l1和l2的长度和
 var mergeTwoLists = function(l1, l2) {
-  function ListNode(val) {
-    this.val = val;
-    this.next = null;
-  }
   if(!l1) {
     return l2;
   }
@@ -86,4 +60,40 @@ var mergeTwoLists = function(l1, l2) {
     cur = cur.next;
   }
   return newList;
+};
+
+// 将l2拼接到l1后面，循环的次数是l2的长度
+var mergeTwoLists = function(l1, l2) {
+  let ans = l1;
+  if(ans === null) {
+      return l2;
+  }
+  let cur = ans;
+  while(l2) {
+    let node = new ListNode();
+    // 针对头节点
+    if(cur.val >= l2.val) {
+      node.val = cur.val;
+      node.next = cur.next;
+      cur.val = l2.val;
+      cur.next = node;
+      l2 = l2.next;
+    }
+    else if(cur.next && l2.val <= cur.next.val) {
+      node.val = l2.val;
+      node.next = cur.next;
+      cur.next = node;
+      l2 = l2.next;
+    }
+    // 针对尾节点
+    else if(!cur.next) {
+      node.val = l2.val;
+      node.next = null;
+      cur.next = node;
+      l2 = l2.next;
+      continue;
+    }
+    cur = cur.next;
+  }
+  return ans;
 };
