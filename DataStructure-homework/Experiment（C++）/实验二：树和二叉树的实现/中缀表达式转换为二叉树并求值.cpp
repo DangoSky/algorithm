@@ -1,10 +1,19 @@
 #include <bits/stdc++.h>
 using namespace std;
+// 存放操作数栈的结构体
 struct Node {
   int val;
   char op;
 };
-void format(string str) {
+// 存放树结点的结构体
+struct treeNode {
+  int val;
+  char op;
+  treeNode *lchild;
+  treeNode *rchild;
+};
+// 中缀表达式转后缀表达式
+stack<Node> turn(string str) {
   // 存放操作数的栈，因为既然操作数也有操作符，所以得用一个结构体而不能用int
   stack<Node> st;
   // 存放操作符的栈
@@ -91,20 +100,92 @@ void format(string str) {
     st.push(node);
     opStack.pop();
   }
+  return st;
+}
+
+// 中缀表达式生成二叉树
+treeNode buildTree(stack<Node> st) {
+  // 把原先栈中的元素存入另一个栈中，这样栈底元素就成栈顶元素了
+  stack<Node> newSt;
   while(!st.empty()) {
-    Node t = st.top();
+    Node top = st.top();
+    newSt.push(top);
     st.pop();
-    if(t.op == NULL) {
-      cout<<t.val<<endl;
+  }
+  // 将操作数作为操作符的左右子树，并不断合并操作数和操作符。最后树节点栈中只剩下一个二叉树的根节点
+  stack<treeNode> treeStack;
+  treeNode node;
+  while(!newSt.empty()) {
+    Node top = newSt.top();
+    // 遇到操作数直接入树节点栈
+    if(top.op == NULL) {
+      treeNode treenode;
+      treenode.val = top.val;
+      treenode.op = NULL;
+      treeStack.push(treenode);
+      newSt.pop();
     }
+    // 遇到操作符则先从树节点栈中取出两个操作数当做左右子树后再入树节点栈
     else {
-      cout<<char(t.op)<<endl;
+      treeNode treenode1 = treeStack.top();
+      treeStack.pop(); 
+      treeNode treenode2 = treeStack.top();
+      treeStack.pop();
+      treeNode treenode;
+      treenode.op = top.op;
+      treenode.rchild = &treenode1;
+      treenode.lchild = &treenode2;
+      treeStack.push(treenode);
+      newSt.pop();
     }
+  }
+  // while(!treeStack.empty()) {
+  //   treeNode t = treeStack.top();
+  //   cout<<t.op<<endl;
+  //   treeStack.pop();
+  // }
+  return treeStack.top();
+}
+
+// 后序遍历求值
+int computed(treeNode head) {
+  cout<<"computed"<<endl;
+  if(&head == NULL) {
+    // return head.val;
+    return NULL;
+  }
+  char op = head.op;
+  int left = computed(*head.lchild);
+  int right = computed(*head.rchild);
+  if(op == '+') {
+    return left + right;
+  }
+  else if(op == '-') {
+    return left - right;
+  }
+  else if(op == '*') {
+    return left * right;
+  }
+  else if(op == '/') {
+    return left / right;
   }
 }
 int main() {
   string str;
   while(cin>>str) {
-    format(str);
+    stack<Node> stack = turn(str);
+    treeNode head = buildTree(stack);
+    int ans = computed(head);
+    cout<<"最终计算结果为： "<<ans<<endl;
+    // while(!stack.empty()) {
+    //   Node t = stack.top();
+    //   stack.pop();
+    //   if(t.op == NULL) {
+    //     cout<<t.val<<endl;
+    //   }
+    //   else {
+    //     cout<<char(t.op)<<endl;
+    //   }
+    // }
   }
 }
