@@ -1,17 +1,72 @@
-#include <bits/stdc++.h>
+#include <stack>
+#include <queue>
+#include <string>
+#include <iostream>
+#include <algorithm>
+#include <functional>
 using namespace std;
+
 // 存放操作数栈的结构体
 struct Node {
-  int val;
-  char op;
+  int val = 0;  // C++11初始化语法
+  char op = '\0';
 };
 // 存放树结点的结构体
-struct treeNode {
-  int val;
-  char op;
-  treeNode *lchild;
-  treeNode *rchild;
+struct TreeNode {
+  int val = 0;
+  char op = '\0';
+  TreeNode *lchild = nullptr;
+  TreeNode *rchild = nullptr;
 };
+using Tree = TreeNode*;
+
+// 求二叉树的深度
+int TreeDepth(const Tree & tree) {
+  if (tree) {
+    return max(TreeDepth(tree->lchild), TreeDepth(tree->rchild)) + 1;
+  }
+  return 0;
+}
+ 
+// 打印二叉树
+void TreePrint(const Tree & tree) {
+  int tree_depth = TreeDepth(tree);  // 待打印二叉树的深度
+  // 输出space_count个空格的函数
+  function<void(int)> print_space = [](int space_count) {
+    while (space_count--) cout << ' ';
+  };  
+  queue<TreeNode *> que;
+  que.push(tree);  // 树根结点入队
+  // 按层打印二叉树
+  for (int current_depth = 1; current_depth <= tree_depth; ++current_depth) {
+    int next_level_node_count = 0;  // 下一层非空结点的个数
+    int space_count = (1 << (tree_depth - current_depth)) - 1;  // 结点字符前后空格的数量
+    queue<TreeNode *> nxt;  // 下一层待打印的结点
+    while (!que.empty())  // 当本层还有待打印的结点
+    {
+      print_space(space_count);  // 打印前导空格
+      TreeNode * front = que.front();  // 取结点
+      if (front != nullptr) {  // 如果结点不是空结点
+        front->op == '\0' ? cout << front->val : cout << front->op;  // 打印结点
+        nxt.push(front->lchild);  // 将左右孩子结点加入队列
+        nxt.push(front->rchild);
+        next_level_node_count += int(front->lchild != nullptr);  // 计算下一层待打印的结点的个数
+        next_level_node_count += int(front->rchild != nullptr);
+      }
+      else {  // 如果结点是空结点
+        cout << '#';  // 打印空结点符号
+        nxt.push(nullptr);  // 放入表示空结点的值
+        nxt.push(nullptr);
+      }
+      que.pop();  // 弹出当前结点
+      que.empty() ? print_space(0) : print_space(space_count + 1);  // 打印后导空格
+    }
+    cout << '\n';  // 换行
+    que = nxt;
+    if (next_level_node_count == 0) break;
+  }
+}
+ 
 // 中缀表达式转后缀表达式
 stack<Node> turn(string str) {
   // 存放操作数的栈，因为既然操作数也有操作符，所以得用一个结构体而不能用int
@@ -23,17 +78,16 @@ stack<Node> turn(string str) {
   // 格式化输入的字符串，把操作数和操作符存入到栈中
   for(int i=0; i<str.size(); i++)  {
     // 格式化数字
-    if(str[i] >= 48 && str[i] <= 57) {
-      temp = temp * 10 + str[i] - 48;
+    if(str[i] >= '0' && str[i] <= '9') {
+      temp = temp * 10 + str[i] - '0';
       mark = true;
     }
-    /// 把操作数或操作符放入栈中
+    // 把操作数或操作符放入栈中
     else {
       // 存入操作数
       if(mark) {
         Node node;
         node.val = temp;
-        node.op = NULL;
         st.push(node);
         mark = false;
         temp = 0;
@@ -76,6 +130,11 @@ stack<Node> turn(string str) {
           node.op = top;
           st.push(node);
           opStack.pop();
+          // 栈空时直接将但当前操作符放入操作符栈
+          if (opStack.empty()) {
+            opStack.push(str[i]);
+            continue;
+          }
           int newTop = opStack.top();
           if(newTop == '+' || newTop == '-') {
             Node node1;
@@ -91,7 +150,7 @@ stack<Node> turn(string str) {
   // 别落了最后还有一个数字
   Node node;
   node.val = temp;
-  node.op = NULL;
+  node.op = '\0';
   st.push(node);
   // 把操作符栈剩下的操作符放入到操作数栈中
   while(!opStack.empty()) {
@@ -100,11 +159,28 @@ stack<Node> turn(string str) {
     st.push(node);
     opStack.pop();
   }
+  // {  // 输出后缀表达式
+  //   cout<<"输出后缀表达式："<<endl;
+  //   auto copy(st);
+  //   stack<Node> rev;
+  //   while(!copy.empty()) {
+  //     Node tem  = copy.top();
+  //     rev.push(tem);
+  //     copy.pop();
+  //   }
+  //   while (!rev.empty()) {
+  //     Node tem = rev.top();
+  //     tem.op == '\0' ? cout << tem.val : cout << tem.op;
+  //     cout << ' '; 
+  //     rev.pop();
+  //   }
+  //   cout << endl;
+  // }
   return st;
 }
-
-// 中缀表达式生成二叉树
-treeNode buildTree(stack<Node> st) {
+ 
+// 后缀表达式生成二叉树
+void buildTree(stack<Node> st, TreeNode*& head) {
   // 把原先栈中的元素存入另一个栈中，这样栈底元素就成栈顶元素了
   stack<Node> newSt;
   while(!st.empty()) {
@@ -112,51 +188,43 @@ treeNode buildTree(stack<Node> st) {
     newSt.push(top);
     st.pop();
   }
-  // 将操作数作为操作符的左右子树，并不断合并操作数和操作符。最后树节点栈中只剩下一个二叉树的根节点
-  stack<treeNode> treeStack;
-  treeNode node;
+  // 将操作数作为操作符的左右子树，并不断合并操作数和操作符。最后树节点栈中只剩下一个二叉树的根节点  
+  stack<TreeNode*> treeStack;
+  TreeNode* node;
   while(!newSt.empty()) {
     Node top = newSt.top();
     // 遇到操作数直接入树节点栈
-    if(top.op == NULL) {
-      treeNode treenode;
-      treenode.val = top.val;
-      treenode.op = NULL;
+    if(top.op == '\0') {
+      TreeNode* treenode = new TreeNode();
+      treenode->val = top.val;
       treeStack.push(treenode);
-      newSt.pop();
     }
     // 遇到操作符则先从树节点栈中取出两个操作数当做左右子树后再入树节点栈
     else {
-      treeNode treenode1 = treeStack.top();
+      TreeNode* treenode1 = treeStack.top();
       treeStack.pop(); 
-      treeNode treenode2 = treeStack.top();
+      TreeNode* treenode2 = treeStack.top();
       treeStack.pop();
-      treeNode treenode;
-      treenode.op = top.op;
-      treenode.rchild = &treenode1;
-      treenode.lchild = &treenode2;
+      TreeNode* treenode = new TreeNode();
+      treenode->op = top.op;
+      treenode->rchild = treenode1;
+      treenode->lchild = treenode2;
       treeStack.push(treenode);
-      newSt.pop();
     }
+    TreeNode* tem = treeStack.top();
+    newSt.pop();
   }
-  // while(!treeStack.empty()) {
-  //   treeNode t = treeStack.top();
-  //   cout<<t.op<<endl;
-  //   treeStack.pop();
-  // }
-  return treeStack.top();
+  head = treeStack.top();
 }
-
+ 
 // 后序遍历求值
-int computed(treeNode head) {
-  cout<<"computed"<<endl;
-  if(&head == NULL) {
-    // return head.val;
-    return NULL;
+int computed(TreeNode* head) {
+  if(head->lchild == NULL || head->rchild == NULL) {
+    return head->val;
   }
-  char op = head.op;
-  int left = computed(*head.lchild);
-  int right = computed(*head.rchild);
+  char op = head->op;
+  int left = computed(head->lchild);
+  int right = computed(head->rchild);
   if(op == '+') {
     return left + right;
   }
@@ -169,23 +237,21 @@ int computed(treeNode head) {
   else if(op == '/') {
     return left / right;
   }
+  return 0;
 }
+ 
 int main() {
   string str;
   while(cin>>str) {
     stack<Node> stack = turn(str);
-    treeNode head = buildTree(stack);
-    int ans = computed(head);
-    cout<<"最终计算结果为： "<<ans<<endl;
-    // while(!stack.empty()) {
-    //   Node t = stack.top();
-    //   stack.pop();
-    //   if(t.op == NULL) {
-    //     cout<<t.val<<endl;
-    //   }
-    //   else {
-    //     cout<<char(t.op)<<endl;
-    //   }
-    // }
+    
+    TreeNode* head;
+    buildTree(stack, head);
+    
+    cout << "打印表达式树：" << endl;
+    TreePrint(head);
+ 
+    cout << "计算结果：" << endl;
+    cout << computed(head) << endl;
   }
 }
