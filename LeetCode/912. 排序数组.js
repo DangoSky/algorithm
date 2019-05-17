@@ -55,3 +55,55 @@ var sortArray = function(nums) {
   return nums;
 }
 
+// 快速排序，填坑法
+var sortArray = function(nums) {
+  function quickSort(arr, left, right) {
+    if(left >= right)  return arr;
+    // 确定基数的位置
+    let index = partition(arr, left, right);
+    quickSort(arr, left, index - 1);
+    quickSort(arr, index + 1, right);
+    return arr;
+  }
+  function partition(arr, left, right) {
+    // 取第一个数为基数
+    let temp = arr[left];
+    while(left < right) {
+      while(left < right && arr[right] >= temp)  right--;
+      arr[left] = arr[right];
+      while(left < right && arr[left] < temp)  left++;
+      arr[right] = arr[left];
+    }
+    arr[left] = temp;
+    return left;
+  }
+  return quickSort(nums, 0, nums.length-1);
+};
+
+// 快速排序，交换两节点
+var sortArray = function(nums) {
+  function partition(arr, left, right) {
+    let temp = arr[left];
+    let p = left + 1;
+    let q = right;
+    while(p <= q) {
+      while(p <= q && arr[p] < temp)  p++;
+      while(p <= q && arr[q] > temp)  q--;
+      if(p <= q) {
+        [arr[p], arr[q]] = [arr[q], arr[p]];
+        p++;
+        q--;
+      }
+    }
+    [arr[left], arr[q]] = [arr[q], arr[left]];
+    return q;
+  }
+  function quickSort(arr, left, right) {
+    if(left >= right)  return arr;
+    let index = partition(arr, left, right);
+    quickSort(arr, left, index - 1);
+    quickSort(arr, index + 1, right);
+    return arr;
+  }
+  return quickSort(nums, 0, nums.length-1);
+};
