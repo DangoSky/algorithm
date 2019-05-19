@@ -43,6 +43,29 @@ var sortArray = function(nums) {
   return nums;
 }
 
+// 双向冒泡
+var sortArray = function(nums) {
+  for(let i=0, len=nums.length; i<len-1; i++) {
+    let mark = true;
+    // 找到最大值放到右边
+    for(let j=0; j<len-i-1; j++) {
+      if(nums[j] > nums[j+1]) {
+        [nums[j], nums[j+1]] = [nums[j+1], nums[j]];
+        mark = false;
+      }
+    }
+    // 找到最小值放到左边
+    for(let t=len-i-2; t>0; t--) {
+      if(nums[t] < nums[t-1]) {
+        [nums[t], nums[t-1]] = [nums[t-1], nums[t]];
+        mark = false;
+      }
+    }
+    if(mark)  return nums;
+  }
+  return nums;
+}
+
 // 选择排序
 var sortArray = function(nums) {
   for(let i=0, len=nums.length; i<len; i++) {
@@ -108,7 +131,7 @@ var sortArray = function(nums) {
   return quickSort(nums, 0, nums.length-1);
 };
 
-// 归并排序，递归
+// 归并排序
 var sortArray = function(nums) {
   function merge(l1, r1, l2, r2) {
     let arr = [];
@@ -133,3 +156,17 @@ var sortArray = function(nums) {
   }
   return mergeSort(0, nums.length-1);
 };
+
+// 插入排序
+var sortArray = function(nums) {
+  for(let i=1, len=nums.length; i<len; i++) {
+    let temp = nums[i];
+    let j = i;
+    while(j >= 0 && temp < nums[j-1]) {
+      nums[j] = nums[j-1];
+      j--;
+    }
+    nums[j] = temp;
+  }
+  return nums;
+}
