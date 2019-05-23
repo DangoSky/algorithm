@@ -16,22 +16,9 @@
  * @return {number}
  */
 
-// 只使用一次循环
 var searchInsert = function(nums, target) {
   for(let i=0; i<nums.length; i++) {
     if(nums[i] >= target) {
-      return i;
-    }
-  }
-  return nums.length;
-};
-
-// 先搜索一次target是否存在数组中，没有的话再添加
-var searchInsert = function(nums, target) {
-  let index = nums.indexOf(target);
-  if(index !== -1)  return index;
-  for(let i=0; i<nums.length; i++) {
-    if(nums[i] > target) {
       return i;
     }
   }
@@ -54,4 +41,18 @@ var searchInsert = function(nums, target) {
     }
   }
   return i;
+};
+
+// 插入排序
+var searchInsert = function(nums, target) {
+  let val = target;
+  let temp = nums;
+  let j = temp.length - 1;
+  while(j >= 0 && val < temp[j]) {
+    temp[j+1] = temp[j];
+    j--;
+  }
+  temp[j+1] = val;
+  if(val === temp[j])  return j;
+  return j+1;
 };
