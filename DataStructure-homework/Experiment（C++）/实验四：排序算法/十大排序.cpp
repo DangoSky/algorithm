@@ -47,6 +47,9 @@ void swap(int &a, int &b) {
 
 // 冒泡排序
 // 通过相邻元素的比较和交换，使得每一趟循环都能找到未有序数组的最大值或最小值
+// 最好：O(n)，只冒泡一次数组就有序的情况。
+// 最坏：O(n2)
+// 平均：O(n2)
 void bubbleSort(int arr[]) {
   for(int i=len-1; i>0; i--) {
     // 如果一轮比较中没有需要交换的数据，则说明数组已经有序。主要是对[5,1,2,3,4]之类的数组进行优化
@@ -90,6 +93,9 @@ void bubbleSort_twoWays(int arr[]) {
 
 // 选择排序
 // 和冒泡排序相似，区别在于选择排序是将每一个元素和它后面的每一个元素进行比较和交换，从而找到最小值
+// 最好：O(n2)
+// 最坏：O(n2)
+// 平均：O(n2)
 void selectSort(int arr[]) {
   for(int i=0; i<len; i++) {
     for(int j=i+1; j<len; j++) {
@@ -102,6 +108,9 @@ void selectSort(int arr[]) {
 
 // 插入排序
 // 以第一个元素作为有序数组，其后的元素通过在这个已有序的数组中找到合适的位置并插入
+// 最好：O(n)，原数组已经是升序的  
+// 最坏：O(n2)， 原数组已经是降序的
+// 平均：O(n2)
 void insertSort(int arr[]) {
   for(int i=1; i<len; i++) {
     int temp = arr[i];
@@ -118,6 +127,9 @@ void insertSort(int arr[]) {
 // 选择一个元素作为基数（通常是第一个元素），把比基数小的元素放到它左边，比基数大的元素放到它右边（相当于二分），再不断递归基数左右两边的序列。
 // 快速排序之填坑
 // 从右边向中间推进的时候，遇到小于基数的数就赋给左边（一开始是基数的位置），右边保留原先的值等之后被左边的值填上。
+// 最好：O(n * logn)，其他的数均匀分布在基数的两边，此时的递归就是不断地二分左右序列。
+// 最坏：O(n2) ， 其他的数都分布在基数的一边，此时划分左右序列就相当于成了插入排序。
+// 平均：O(n * logn)
 void quickSort(int arr[], int left, int right) {
   if(left >= right)  return;
   // 取第一个数为基数
@@ -171,6 +183,9 @@ void quickSort_swap(int arr[], int left, int right) {
 
 // 归并排序
 // 递归将数组分为两个序列，有序合并这两个序列
+// 最好：O(n * logn)
+// 最坏：O(n * logn)
+// 平均：O(n * logn)
 void mergeSort(int arr[], int left, int right) {
   while(left >= right)  return;
   // 比起(left+right)/2，更推荐下面这种写法，可以避免数溢出
@@ -202,6 +217,9 @@ void mergeSort(int arr[], int left, int right) {
 
 // 桶排序
 // 将数组元素有序分配到n个桶里，最后再合并各个桶
+// 最好：O(n)，每个数都在分布在一个桶里，这样就可以省略将数插入排序到桶里的时间(类似于计数排序以空间换时间)。
+// 最坏：O(n2)，所有的数都分布在一个桶里
+// 平均：O(n + k)，k表示桶的个数
 void bucketSort(int arr[]) {
   // 桶的个数
   int num = 5;
@@ -241,6 +259,9 @@ void bucketSort(int arr[]) {
 // 基数排序
 // 使用十个桶0-9，把每个数从低位到高位根据位数放到相应的桶里，以此循环最大值的位数次。
 // 只能排列正整数，因为遇到负号和小数点无法进行比较。
+// 最好：O(n * k)，k表示最大值的位数
+// 最坏：O(n * k)
+// 平均：O(n * k)
 void radixSort(int arr[]) {
   int _max = (*max_element(arr, arr+len));
   // 计算最大值的位数
@@ -277,6 +298,9 @@ void radixSort(int arr[]) {
 // 计数排序
 // 以数组元素值为键，出现次数为值存进一个临时数组，最后再遍历这个临时数组还原回原数组。
 // 只能排序正整数
+// 最好：O(n + k)，k是最大值和最小值的差
+// 最坏：O(n + k)
+// 平均：O(n + k)
 void countingSort(int arr[]) {
   int res[10000];
   memset(res, 0, sizeof(res));
@@ -324,6 +348,9 @@ void countingSort1(int arr[]) {
 // 根据数组建立一个堆（类似完全二叉树），每个结点的值都大于左右结点（最大堆，通常用于升序），或小于左右结点（最小堆，通常用于降序）。
 // 对于升序排序，先构建最大堆后，交换堆顶元素（最大值）和堆底元素，每一次交换都能得到一个未有序序列的最大值。
 // 重新调整最大堆，再交换堆顶元素和堆底元素。重复n-1次后就能得到一个升序的数组
+// 最好：O(n * logn)，logn是调整最大堆所花的时间
+// 最坏：O(n * logn)
+// 平均：O(n * logn)
 
 // 调整最大堆，使index的值大于左右节点
 void adjustHeap(int arr[], int index, int size) {
@@ -366,7 +393,10 @@ void heapSort(int arr[]) {
 
 // 希尔排序
 // 类似插入排序，只是向前移动的步数变成gap，插入排序每次都只是向前移动1。
-// 通过某个增量gap，将整个序列分给若干组，从后往前进行组内成员的比较和交换，随后逐步缩小增量至1.
+// 通过某个增量gap，将整个序列分给若干组，从后往前进行组内成员的比较和交换，随后逐步缩小增量至1。
+// 最好：O(n * logn)，步长不断二分
+// 最坏：O(n * logn)
+// 平均：O(n * logn)
 void shellSort(int arr[]) {
   // 初始步数
   int gap = floor(len / 2);
