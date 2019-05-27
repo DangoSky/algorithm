@@ -11,7 +11,7 @@
   + [计数排序](#计数排序)
   + [堆排序](#堆排序)
   + [希尔排序](#希尔排序)
-+ [洗牌算法(数组乱序)](#洗牌算法(数组乱序))
++ [洗牌算法](#洗牌算法)
 
 # 质数判断和筛选
 普通的质数判断方法。
@@ -45,7 +45,10 @@ function choosePrimes(n = 10000) {
 ```
 
 # 十大排序
-推荐一个[数据结构和算法动态可视化](https://visualgo.net/en)工具，可以查看各种算法的动画演示。
+推荐一个[数据结构和算法动态可视化](https://visualgo.net/en)工具，可以查看各种算法的动画演示。另外附上 [C++版的十大排序](https://github.com/DangoSky/algorithm/blob/master/DataStructure-homework/Experiment%EF%BC%88C%2B%2B%EF%BC%89/%E5%AE%9E%E9%AA%8C%E5%9B%9B%EF%BC%9A%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/%E5%8D%81%E5%A4%A7%E6%8E%92%E5%BA%8F.cpp)（习惯了写 `JavaScript`，所以这 `C++` 代码写得有些丑，请不要介意哈）。
+
+![](https://user-gold-cdn.xitu.io/2016/11/29/4abde1748817d7f35f2bf8b6a058aa40?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
 ## 冒泡排序
 通过相邻元素的比较和交换，使得每一趟循环都能找到未有序数组的最大值或最小值。   
 
@@ -481,8 +484,8 @@ function shellSort(nums) {
 }
 ```
 
-# 洗牌算法(数组乱序)
-遍历数组元素，将当前元素和前面未有序序列中任意一个数进行交换，保证每个元素和其他元素交换的概率是等大的。
+# 洗牌算法()
+洗牌算法其实就是随机打乱数组，实现思路是：遍历数组元素，将当前元素和前面未有序序列中任意一个数进行交换，保证每个元素和其他元素交换的概率是等大的。
 ```
 let arr = [0, 1, 2, 3, 4];
 for(let i=arr.length-1; i>=0; i--) {
