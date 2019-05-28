@@ -20,6 +20,7 @@
 // 遍历时遇到一个数就把所有子集加上该数组成新的子集，遍历完毕即是所有子集
 var subsets = function(nums) {
   let res = [];
+  res.push([]);
   for(let i=0, len=nums.length; i<len; i++) {
     let temLen = res.length;
     for(let j=0; j<temLen; j++) {
@@ -27,9 +28,6 @@ var subsets = function(nums) {
       arr.push(nums[i]);
       res.push(arr);
     }
-    res.push([nums[i]]);
   }  
-  res.push([]);
   return res;
 };
-console.log(subsets([1, 2, 3]));
