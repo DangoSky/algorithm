@@ -18,5 +18,23 @@ var majorityElement = function(nums) {
     }
   }
 };
-console.log(majorityElement([3, 2, 3]));
-console.log(majorityElement([2,2,1,1,1,2,2]));
+
+// 摩尔投票算法
+// 出现次数大于 ⌊ n/2 ⌋ 的元素，最多只有一个
+var majorityElement = function(nums) {
+  let res = nums[0];
+  let count = 1;
+  for(let i=1, len=nums.length; i<len; i++) {
+    if(res === nums[i]) {
+      count++;
+    }
+    else {
+      count--;
+    }
+    if(count === 0) {
+      res = nums[i];
+      count = 1;
+    }
+  }
+  return res;
+};
