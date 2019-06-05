@@ -12,7 +12,8 @@
   + [堆排序](#堆排序)
   + [希尔排序](#希尔排序)
 + [洗牌算法](#洗牌算法)
-
++ [二叉树](#二叉树)
+  + [二叉排序树](#二叉排序树)
 # 质数判断和筛选
 普通的质数判断方法。
 ```
@@ -494,3 +495,72 @@ for(let i=arr.length-1; i>0; i--) {
 }
 ```
 有一种更简单的方法也可以打乱数组：``arr.sort(() => Math.random() - 0.5)``。但据说这种方法得到的数组并不能达到真正的乱序，具体原因我现在还不清楚，得之后我深入研究了再做补充。
+
+# 二叉树
+## 二叉排序树
+二叉排序树 / 二叉查找树 / 二叉搜索树：左子树上所有结点的值均小于它的根结点的值，右子树上所有结点的值均大于或等于它的根结点的值，并且左右子树都是二叉排序树。所以只要构建一棵二叉排序树，对其进行中序遍历即可得到一个升序序列。
+
+```
+class BinaryTree {
+  constructor() {
+    this.root = {
+      val: undefined,
+      lchild: {},
+      rchild: {}
+    };
+  }
+  // 根据参数数组构建二叉排序树
+  createBST(arr) {
+    arr.forEach(val => {
+      this.insertBST(this.root, val);
+    })
+  }
+  // 向二叉排序树中插入结点
+  insertBST(root, val) {
+    // 空树或叶子结点
+    if(root.val === undefined) {
+      root.val = val;
+      root.lchild = {};
+      root.rchild = {};
+    }
+    else if(val < root.val) {
+      this.insertBST(root.lchild, val);
+    }
+    else if(val >= root.val) {
+      this.insertBST(root.rchild, val);
+    }
+  }
+  // 中序遍历(左根右)，返回一个升序的数组
+  ascendingOrder() {
+    let res = [];
+    function fn(root) {
+      if(root.val === undefined)  return;
+      fn(root.lchild);
+      res.push(root.val);
+      fn(root.rchild);
+    }
+    fn(this.root);
+    return res;
+  }
+  // 中序遍历(右根左)，返回一个降序的数组
+  descendingOrder() {
+    let res = [];
+    function fn(root) {
+      if(root.val === undefined)  return;
+      fn(root.rchild);
+      res.push(root.val);
+      fn(root.lchild);
+    }
+    fn(this.root);
+    return res;
+  }
+}
+
+// 测试代码
+let tree = new BinaryTree();
+tree.createBST([22, 44]);
+tree.createBST([2, 4, 165, 516, -316, 165, 0, 1, 164]);
+tree.insertBST(tree.root, 15);
+console.log(tree.ascendingOrder());
+console.log(tree.descendingOrder());
+```
