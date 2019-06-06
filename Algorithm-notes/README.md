@@ -175,7 +175,7 @@ function quickSort(nums) {
     arr[left] = temp;
     return left;
   }
-  recursive(nums, 0, nums.length-1);
+  return recursive(nums, 0, nums.length-1);
 }
 ```
 
@@ -208,7 +208,7 @@ function quickSort1(nums) {
     [arr[left], arr[q]] = [arr[q], arr[left]];
     return q;
   }
-  recursive(nums, 0, nums.length-1);
+  return recursive(nums, 0, nums.length-1);
 }
 ```
 
