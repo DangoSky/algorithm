@@ -1,4 +1,5 @@
 # 算法思想
+
 + [质数判断和筛选](#质数判断和筛选)
 + [十大排序](#十大排序)
   + [冒泡排序](#冒泡排序)
@@ -14,9 +15,13 @@
 + [洗牌算法](#洗牌算法)
 + [二叉树](#二叉树)
   + [二叉排序树](#二叉排序树)
++ [KMP算法](#KMP算法)
+
 # 质数判断和筛选
+
 普通的质数判断方法。
-```
+
+```js
 function judge(n) {
   for(let i=2, len=Math.sqrt(n); i<=len; i++) {
     if(n % i === 0)  return false;
@@ -26,7 +31,8 @@ function judge(n) {
 ```
 
 厄拉多塞筛法，时间复杂度O(n * loglog n)：从 2 开始遍历，把 2 的倍数都标记为 false（表示不是素数），再从 2 的下一位素数 3 开始也同样标记其倍数。以此类推，最后仍为 true 的则为素数。
-```
+
+```js
 function choosePrimes(n = 10000) {
   // 标记是否为素数
   let mark = Array(n).fill(true);
@@ -46,17 +52,20 @@ function choosePrimes(n = 10000) {
 ```
 
 # 十大排序
-推荐一个[数据结构和算法动态可视化](https://visualgo.net/en)工具，可以查看各种算法的动画演示。另外附上 [C++版的十大排序](https://github.com/DangoSky/algorithm/blob/master/DataStructure-homework/Experiment%EF%BC%88C%2B%2B%EF%BC%89/%E5%AE%9E%E9%AA%8C%E5%9B%9B%EF%BC%9A%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/%E5%8D%81%E5%A4%A7%E6%8E%92%E5%BA%8F.cpp)（习惯了写 `JavaScript`，所以这 `C++` 代码写得有些丑，请不要介意哈）。
 
-![](https://user-gold-cdn.xitu.io/2016/11/29/4abde1748817d7f35f2bf8b6a058aa40?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+推荐一个[数据结构和算法动态可视化](https://visualgo.net/en)工具，可以查看各种算法的动画演示。另外附上 [C++版的十大排序](https://github.com/DangoSky/algorithm/blob/master/DataStructure-homework/Experiment%EF%BC%88C%2B%2B%EF%BC%89/%E5%AE%9E%E9%AA%8C%E5%9B%9B%EF%BC%9A%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/%E5%8D%81%E5%A4%A7%E6%8E%92%E5%BA%8F.cpp)（习惯了写 `JavaScript`，所以这 `C++` 代码写得有些丑，请不要介意哈）。可以[在这里测试代码](https://leetcode-cn.com/problems/sort-an-array/)。
+
+![十大排序时间空间复杂度比较图](https://user-gold-cdn.xitu.io/2016/11/29/4abde1748817d7f35f2bf8b6a058aa40?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
 ## 冒泡排序
-通过相邻元素的比较和交换，使得每一趟循环都能找到未有序数组的最大值或最小值。   
 
-最好：`O(n)`，只需要冒泡一次数组就有序了。   
-最坏：`O(n²)`   
-平均：`O(n²)`
-```
+通过相邻元素的比较和交换，使得每一趟循环都能找到未有序数组的最大值或最小值。
+
++ 最好：`O(n)`，只需要冒泡一次数组就有序了。
++ 最坏：`O(n²)`
++ 平均：`O(n²)`
+
+```js
 function bubbleSort(nums) {
   for(let i=0, len=nums.length; i<len-1; i++) {
     // 如果一轮比较中没有需要交换的数据，则说明数组已经有序。主要是对[5,1,2,3,4]之类的数组进行优化
@@ -73,8 +82,10 @@ function bubbleSort(nums) {
 ```
 
 ## 双向冒泡
+
 普通的冒泡排序在一趟循环中只能找出一个最大值或最小值，双向冒泡则是多一轮循环既找出最大值也找出最小值。
-```
+
+```js
 function bubbleSort_twoWays(nums) {
   let low = 0;
   let high = nums.length - 1;
@@ -102,12 +113,14 @@ function bubbleSort_twoWays(nums) {
 ```
 
 ## 选择排序
+
 和冒泡排序相似，区别在于选择排序是将每一个元素和它后面的元素进行比较和交换。  
 
-最好：`O(n²)`   
-最坏：`O(n²)`   
-平均：`O(n²)`
-```
++ 最好：`O(n²)`
++ 最坏：`O(n²)`
++ 平均：`O(n²)`
+
+```js
 function selectSort(nums) {
   for(let i=0, len=nums.length; i<len; i++) {
     for(let j=i+1; j<len; j++) {
@@ -120,12 +133,14 @@ function selectSort(nums) {
 ```
 
 ## 插入排序
+
 以第一个元素作为有序数组，其后的元素通过在这个已有序的数组中找到合适的位置并插入。
 
-最好：`O(n)`，原数组已经是升序的。     
-最坏：`O(n²)`    
-平均：`O(n²)`
-```
++ 最好：`O(n)`，原数组已经是升序的。
++ 最坏：`O(n²)`
++ 平均：`O(n²)`
+
+```js
 function insertSort(nums) {
   for(let i=1, len=nums.length; i<len; i++) {
     let temp = nums[i];
@@ -140,18 +155,24 @@ function insertSort(nums) {
 ```
 
 ## 快速排序
-选择一个元素作为基数（通常是第一个元素），把比基数小的元素放到它左边，比基数大的元素放到它右边（相当于二分），再不断递归基数左右两边的序列。   
 
-最好：`O(n * logn)`，所有数均匀分布在基数的两边，此时的递归就是不断地二分左右序列。  
-最坏：`O(n²)` ，所有数都分布在基数的一边，此时划分左右序列就相当于是插入排序。   
-平均：`O(n * logn)`    
+选择一个元素作为基数（通常是第一个元素），把比基数小的元素放到它左边，比基数大的元素放到它右边（相当于二分），再不断递归基数左右两边的序列。
 
-参考学习链接：    
-[算法 3：最常用的排序——快速排序](https://wiki.jikexueyuan.com/project/easy-learn-algorithm/fast-sort.html)     
++ 最好：`O(n * logn)`，所有数均匀分布在基数的两边，此时的递归就是不断地二分左右序列。 
++ 最坏：`O(n²)` ，所有数都分布在基数的一边，此时划分左右序列就相当于是插入排序。
++ 平均：`O(n * logn)`
+
+参考学习链接：
+
+[算法 3：最常用的排序——快速排序](https://wiki.jikexueyuan.com/project/easy-learn-algorithm/fast-sort.html)
+
 [三种快速排序以及快速排序的优化](https://blog.csdn.net/insistGoGo/article/details/7785038)
+
 ### 快速排序之填坑
+
 从右边向中间推进的时候，遇到小于基数的数就赋给左边（一开始是基数的位置），右边保留原先的值等之后被左边的值填上。
-```
+
+```js
 function quickSort(nums) {
   // 递归排序基数左右两边的序列
   function recursive(arr, left, right) {
@@ -180,8 +201,10 @@ function quickSort(nums) {
 ```
 
 ### 快速排序之交换
+
 从左右两边向中间推进的时候，遇到不符合的数就两边交换值。
-```
+
+```js
 function quickSort1(nums) {
   function recursive(arr, left, right) {
     if(left >= right)  return;
@@ -213,15 +236,18 @@ function quickSort1(nums) {
 ```
 
 ## 归并排序
-递归将数组分为两个序列，有序合并这两个序列。   
 
-最好：`O(n * logn)`    
-最坏：`O(n * logn)`   
-平均：`O(n * logn)`  
+递归将数组分为两个序列，有序合并这两个序列。
 
-参考学习链接：   
++ 最好：`O(n * logn)`
++ 最坏：`O(n * logn)`
++ 平均：`O(n * logn)`  
+
+参考学习链接：
+
 [图解排序算法(四)之归并排序](https://www.cnblogs.com/chengxiao/p/6194356.html)
-```
+
+```js
 function mergeSort(nums) {
   // 有序合并两个数组
   function merge(l1, r1, l2, r2) {
@@ -253,15 +279,17 @@ function mergeSort(nums) {
 ```
 
 ## 桶排序
-取 n 个桶，根据数组的最大值和最小值确认每个桶存放的数的区间，将数组元素插入到相应的桶里，最后再合并各个桶。   
+取 n 个桶，根据数组的最大值和最小值确认每个桶存放的数的区间，将数组元素插入到相应的桶里，最后再合并各个桶。
 
-最好：`O(n)`，每个数都在分布在一个桶里，这样就不用将数插入排序到桶里了(类似于计数排序以空间换时间)。    
-最坏：`O(n²)`，所有的数都分布在一个桶里。    
-平均：`O(n + k)`，k表示桶的个数。   
++ 最好：`O(n)`，每个数都在分布在一个桶里，这样就不用将数插入排序到桶里了(类似于计数排序以空间换时间)。
++ 最坏：`O(n²)`，所有的数都分布在一个桶里。
++ 平均：`O(n + k)`，k表示桶的个数。
 
-参考学习链接：   
+参考学习链接：
+
 [拜托，面试别再问我桶排序了！！！](http://zhuanlan.51cto.com/art/201811/586129.htm)
-```
+
+```js
 function bucketSort(nums) {
   // 桶的个数，只要是正数即可
   let num = 5;
@@ -294,16 +322,18 @@ function bucketSort(nums) {
 ```
 
 ## 基数排序
-使用十个桶 0-9，把每个数从低位到高位根据位数放到相应的桶里，以此循环最大值的位数次。**但只能排列正整数，因为遇到负号和小数点无法进行比较**。   
 
-最好：`O(n * k)`，k表示最大值的位数。   
-最坏：`O(n * k)`   
-平均：`O(n * k)`   
+使用十个桶 0-9，把每个数从低位到高位根据位数放到相应的桶里，以此循环最大值的位数次。**但只能排列正整数，因为遇到负号和小数点无法进行比较**。
 
-参考学习链接：    
++ 最好：`O(n * k)`，k表示最大值的位数。
++ 最坏：`O(n * k)`
++ 平均：`O(n * k)`
+
+参考学习链接：
+
 [算法总结系列之五: 基数排序(Radix Sort)](https://www.cnblogs.com/sun/archive/2008/06/26/1230095.html)
-[]()
-```
+
+```js
 function radixSort(nums) {
   // 计算位数
   function getDigits(n) {
@@ -343,17 +373,19 @@ function radixSort(nums) {
   let res = [].concat.apply([], arr);
   nums.forEach((val, index) => {
     nums[index] = +res[index];
-  }) 
+  })
 }
 ```
 
 ## 计数排序
-以数组元素值为键，出现次数为值存进一个临时数组，最后再遍历这个临时数组还原回原数组。因为 JavaScript 的数组下标是以字符串形式存储的，所以**计数排序可以用来排列负数，但不可以排列小数**。   
 
-最好：`O(n + k)`，k是最大值和最小值的差。   
-最坏：`O(n + k)`   
-平均：`O(n + k)`
-```
+以数组元素值为键，出现次数为值存进一个临时数组，最后再遍历这个临时数组还原回原数组。因为 JavaScript 的数组下标是以字符串形式存储的，所以**计数排序可以用来排列负数，但不可以排列小数**。
+
++ 最好：`O(n + k)`，k是最大值和最小值的差。
++ 最坏：`O(n + k)`
++ 平均：`O(n + k)`
+
+```js
 function countingSort(nums) {
   let arr = [];
   let max = Math.max(...nums);
@@ -375,10 +407,12 @@ function countingSort(nums) {
 ```
 
 ## 计数排序优化
-把每一个数组元素都加上 min 的相反数，来避免特殊情况下的空间浪费，通过这种优化可以把所开的空间大小从 max+1 降低为 max-min+1，max 和 min 分别为数组中的最大值和最小值。   
+
+把每一个数组元素都加上 min 的相反数，来避免特殊情况下的空间浪费，通过这种优化可以把所开的空间大小从 max+1 降低为 max-min+1，max 和 min 分别为数组中的最大值和最小值。
 
 比如数组 [103, 102, 101, 100]，普通的计数排序需要开一个长度为 104 的数组，而且前面 100 个值都是 undefined，使用该优化方法后可以只开一个长度为 4 的数组。
-```
+
+```js
 function countingSort(nums) {
   let arr = [];
   let max = Math.max(...nums);
@@ -402,16 +436,20 @@ function countingSort(nums) {
 ```
 
 ## 堆排序
+
 根据数组建立一个堆（类似完全二叉树），每个结点的值都大于左右结点（最大堆，通常用于升序），或小于左右结点（最小堆，通常用于降序）。对于升序排序，先构建最大堆后，交换堆顶元素（表示最大值）和堆底元素，每一次交换都能得到未有序序列的最大值。重新调整最大堆，再交换堆顶元素和堆底元素，重复 n-1 次后就能得到一个升序的数组。  
 
-最好：`O(n * logn)`，logn是调整最大堆所花的时间。   
-最坏：`O(n * logn)`   
-平均：`O(n * logn)`   
++ 最好：`O(n * logn)`，logn是调整最大堆所花的时间。
++ 最坏：`O(n * logn)`
++ 平均：`O(n * logn)`
 
-参考学习链接：    
-[常见排序算法 - 堆排序 (Heap Sort)](http://bubkoo.com/2014/01/14/sort-algorithm/heap-sort/)    
+参考学习链接：
+
+[常见排序算法 - 堆排序 (Heap Sort)](http://bubkoo.com/2014/01/14/sort-algorithm/heap-sort/)
+
 [图解排序算法(三)之堆排序](https://www.cnblogs.com/chengxiao/p/6129630.html)
-```
+
+```js
 function heapSort(nums) {
   // 调整最大堆，使index的值大于左右节点
   function adjustHeap(nums, index, size) {
@@ -453,15 +491,18 @@ function heapSort(nums) {
 ```
 
 ## 希尔排序
-通过某个增量 gap，将整个序列分给若干组，从后往前进行组内成员的比较和交换，随后逐步缩小增量至 1。希尔排序类似于插入排序，只是一开始向前移动的步数从 1 变成了 gap。 
 
-最好：`O(n * logn)`，步长不断二分。    
-最坏：`O(n * logn)`   
-平均：`O(n * logn)`   
+通过某个增量 gap，将整个序列分给若干组，从后往前进行组内成员的比较和交换，随后逐步缩小增量至 1。希尔排序类似于插入排序，只是一开始向前移动的步数从 1 变成了 gap。
 
-参考学习链接：   
++ 最好：`O(n * logn)`，步长不断二分。
++ 最坏：`O(n * logn)`
++ 平均：`O(n * logn)`
+
+参考学习链接：
+
 [图解排序算法(二)之希尔排序](https://www.cnblogs.com/chengxiao/p/6104371.html)
-```
+
+```js
 function shellSort(nums) {
   let len = nums.length;
   // 初始步数
@@ -486,21 +527,26 @@ function shellSort(nums) {
 ```
 
 # 洗牌算法
+
 洗牌算法其实就是随机打乱数组，实现思路是：遍历数组元素，将当前元素和前面未有序序列中任意一个数进行交换，保证每个元素和其他元素交换的概率是等大的。
-```
+
+```js
 let arr = [0, 1, 2, 3, 4];
 for(let i=arr.length-1; i>0; i--) {
   let index = parseInt(Math.random() * (i + 1));
   [arr[i], arr[index]] = [arr[index], arr[i]];
 }
 ```
+
 有一种更简单的方法也可以打乱数组：``arr.sort(() => Math.random() - 0.5)``。但据说这种方法得到的数组并不能达到真正的乱序，具体原因我现在还不清楚，得之后我深入研究了再做补充。
 
 # 二叉树
+
 ## 二叉排序树
+
 二叉排序树 / 二叉查找树 / 二叉搜索树：左子树上所有结点的值均小于它的根结点的值，右子树上所有结点的值均大于或等于它的根结点的值，并且左右子树都是二叉排序树。所以只要构建一棵二叉排序树，对其进行中序遍历即可得到一个升序序列。
 
-```
+```js
 class BinaryTree {
   constructor() {
     this.root = {
@@ -563,4 +609,60 @@ tree.createBST([2, 4, 165, 516, -316, 165, 0, 1, 164]);
 tree.insertBST(tree.root, 15);
 console.log(tree.ascendingOrder());
 console.log(tree.descendingOrder());
+```
+
+# KMP算法
+
+在一个字符串 str 中查找字符串 s，暴力算法从每个 str[i] 开始匹配s，如果遇到不匹配的字符就回到 i+1 的位置上继续从头匹配，所以时间复杂度是 `0(n * m)`。KMP 算法则是在每次遇到不匹配的字符时，不去回溯 i，而是根据不匹配时 j 的 next 值去回溯模式串 s。所以 KMP 算法的时间复杂度是 `O(n + m)`。
+
+[测试地址](https://leetcode-cn.com/problems/implement-strstr/)
+
+参考学习链接：
+
+[阮一峰的网络日志：字符串匹配的KMP算法](http://www.ruanyifeng.com/blog/2013/05/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm.html)
+
+[KMP 算法](https://subetter.com/algorithm/kmp-algorithm.html)
+
+```js
+  // 计算next数组，next[i]表示str[i]前面字符串的最长公共前后缀
+  // 如 abcdabe，next[6]=2，最长公共前后缀是ab。
+  function getNext(str) {
+    let len = str.length;
+    // i表示str的下标
+    let i = 0, j = -1;
+    let next = [];
+    // next[0]前面没有字符串了，所以置为-1
+    next[0] = -1;
+    // 因为if中是先i++再给next[i]赋值，所以循环到len-1就够了
+    while(i < len - 1) {
+      if(j === -1 || str[i] === str[j]) {
+        i++;
+        j++;
+        next[i] = j;
+      }
+      else {
+        j = next[j];
+      }
+    }
+    return next;
+  }
+
+  function kmp(str, s) {
+    let next = getNext(s);
+    let len1 = str.length, len2 = s.length;
+    let i = 0, j = 0;
+    while(i <len1 && j < len2) {
+      if(j === -1 || str[i] === s[j]) {
+        i++;
+        j++;
+      }
+      else {
+        j = next[j];
+      }
+    }
+    // 匹配成功，返回在str中第一次出现s的下标
+    if(j === len2)  return i - j;
+    // 没有匹配到就返回-1
+    return -1;
+  }
 ```
