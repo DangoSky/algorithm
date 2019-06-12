@@ -3,17 +3,31 @@
 + [质数判断和筛选](#质数判断和筛选)
 + [十大排序](#十大排序)
   + [冒泡排序](#冒泡排序)
+    + [单向冒泡](#单向冒泡)
+    + [双向冒泡](#双向冒泡)
   + [选择排序](#选择排序)
   + [插入排序](#插入排序)
   + [快速排序](#快速排序)
+    + [快速排序之填坑](#快速排序之填坑)
+    + [快速排序之交换](#快速排序之交换)
   + [归并排序](#归并排序)
   + [桶排序](#桶排序)
   + [基数排序](#基数排序)
   + [计数排序](#计数排序)
+    + [计数排序常规](#计数排序常规)
+    + [计数排序优化](#计数排序优化)
   + [堆排序](#堆排序)
   + [希尔排序](#希尔排序)
 + [洗牌算法](#洗牌算法)
 + [二叉树](#二叉树)
+  + [构造二叉树](#构造二叉树)
+    + [根据先序遍历和中序遍历构造二叉树](#根据先序遍历和中序遍历构造二叉树)
+    + [根据后序遍历和中序遍历构造二叉树](#根据后序遍历和中序遍历构造二叉树)
+  + [遍历二叉树](#遍历二叉树)
+    + [先序遍历](#先序遍历)
+    + [中序遍历](#中序遍历)
+    + [后序遍历](#后序遍历)
+    + [层序遍历](#层序遍历)
   + [二叉排序树](#二叉排序树)
 + [KMP算法](#KMP算法)
 
@@ -64,6 +78,8 @@ function choosePrimes(n = 10000) {
 + 最好：`O(n)`，只需要冒泡一次数组就有序了。
 + 最坏：`O(n²)`
 + 平均：`O(n²)`
+
+### 单向冒泡
 
 ```js
 function bubbleSort(nums) {
@@ -279,6 +295,7 @@ function mergeSort(nums) {
 ```
 
 ## 桶排序
+
 取 n 个桶，根据数组的最大值和最小值确认每个桶存放的数的区间，将数组元素插入到相应的桶里，最后再合并各个桶。
 
 + 最好：`O(n)`，每个数都在分布在一个桶里，这样就不用将数插入排序到桶里了(类似于计数排序以空间换时间)。
@@ -385,6 +402,8 @@ function radixSort(nums) {
 + 最坏：`O(n + k)`
 + 平均：`O(n + k)`
 
+### 计数排序常规
+
 ```js
 function countingSort(nums) {
   let arr = [];
@@ -406,7 +425,7 @@ function countingSort(nums) {
 }
 ```
 
-## 计数排序优化
+### 计数排序优化
 
 把每一个数组元素都加上 min 的相反数，来避免特殊情况下的空间浪费，通过这种优化可以把所开的空间大小从 max+1 降低为 max-min+1，max 和 min 分别为数组中的最大值和最小值。
 
@@ -541,6 +560,201 @@ for(let i=arr.length-1; i>0; i--) {
 有一种更简单的方法也可以打乱数组：``arr.sort(() => Math.random() - 0.5)``。但据说这种方法得到的数组并不能达到真正的乱序，具体原因我现在还不清楚，得之后我深入研究了再做补充。
 
 # 二叉树
+
+## 构造二叉树
+
+### 根据先序遍历和中序遍历构造二叉树
+
+```js
+var buildTree = function(preorder, inorder) {
+  function build(preL, preR, inL, inR) {
+    if(preL > preR || inL > inR) {
+      return null;
+    }
+    let node = new TreeNode(preorder[preL]);
+    // 在中序遍历中找出根节点，以此区分左右子树
+    let index = 0;
+    for(let i=inL; i<=inR; i++) {
+      if(inorder[i] === preorder[preL]) {
+        index = i;
+        break;
+      }
+    }
+    // 左子树的结点数量
+    let leftNum = index - inL;
+    // 递归构建左右子树
+    node.left = build(preL+1, preL+leftNum, inL, index-1);
+    node.right = build(preL+leftNum+1, preR, index+1, inR);
+    return node;
+  }
+  return build(0, preorder.length-1, 0, inorder.length-1);  
+};
+```
+
+### 根据后序遍历和中序遍历构造二叉树
+
+```js
+var buildTree = function(inorder, postorder) {
+  function build(l1, r1, l2, r2) {
+    if(l1 > r1 || l2 > r2)  return null;
+    let index = 0;
+    let root = new TreeNode();
+    root.val = postorder[r2];
+    for(let i=l1; i<=r1; i++) {
+      if(inorder[i] === postorder[r2]) {
+        index = i;
+        break;
+      }
+    }
+    let sum = index - l1;
+    root.left = build(l1, index - 1, l2, l2 + sum - 1)
+    root.right = build(index + 1, r1, l2 + sum, r2 - 1); 
+    return root;
+  }
+  return build(0, inorder.length - 1, 0, postorder.length - 1);
+};
+```
+
+## 遍历二叉树
+
+### 先序遍历
+
+#### 递归
+
+```js
+function preorderTraversal(root) {
+  let res = [];
+  function print(root) {
+    if(!root)  return root;
+    res.push(root.val);
+    print(root.left);
+    print(root.right);
+  }
+  print(root);
+  return res;
+};
+```
+
+#### 迭代
+
+```js
+function preorderTraversal(root) {
+  if(root === null)  return [];
+  let res = [];
+  let stack = [root];
+  while(stack.length) {
+    let top = stack.shift();
+    res.push(top.val);
+    // 使用 unshift 而不是 push 才能保证左子树会先于右子树被访问到
+    if(top.right)  stack.unshift(top.right);
+    if(top.left)   stack.unshift(top.left);
+  }
+  return res;
+}
+```
+
+### 中序遍历
+
+#### 递归
+
+```js
+function inorderTraversal(root) {
+  let res = [];
+  function print(root) {
+    if(root === null) return root;
+    print(root.left);
+    res.push(root.val);
+    print(root.right);
+  }
+  print(root);
+  return res;
+};
+```
+
+#### 迭代
+
+```js
+function inorderTraversal(root) {
+  let cur = root;
+  let stack = [];
+  let res = [];
+  while(cur || stack.length !== 0) {
+    // 先遍历左子树到底部
+    if(cur) {
+      stack.unshift(cur);
+      cur = cur.left;
+    }
+    // 再遍历右子树
+    else {
+      cur = stack.shift();
+      res.push(cur.val);
+      cur = cur.right;
+    }
+  }
+  return res;
+};
+```
+
+### 后序遍历
+
+#### 递归
+
+```js
+var postorderTraversal = function(root) {
+  let res = [];
+  function print(root) {
+    if(!root)  return root;
+    print(root.left);
+    print(root.right);
+    res.push(root.val);
+  }
+  print(root);
+  return res;
+};
+```
+
+#### 迭代
+
+```js
+function postorderTraversal(root) {
+  if(root === null)  return [];
+  let res = [];
+  let stack = [root];
+  while(stack.length) {
+    let top = stack.shift();
+    // 使用 unshift 而不是 push 才能保证右子树会先于左子树被访问到，只要再把值插入到结果数组头部即可得到后序遍历
+    if(top.left)  stack.unshift(top.left);
+    if(top.right)  stack.unshift(top.right);
+    res.unshift(top.val);
+  }
+  return res;
+}
+```
+
+### 层序遍历
+
+```js
+function levelOrder(root) {
+  if(root === null)  return [];
+  let queue = [];
+  let res = [];
+  queue.push(root);
+  // 每一层的节点数量
+  let sum = 1;
+  while(queue.length) {
+    let temp = [];
+    while(sum--) {
+      let top = queue.shift();
+      temp.push(top.val);
+      if(top.left)  queue.push(top.left);
+      if(top.right)  queue.push(top.right);
+    }
+    res.push(temp);
+    sum = queue.length;
+  }
+  return res;
+};
+```
 
 ## 二叉排序树
 
