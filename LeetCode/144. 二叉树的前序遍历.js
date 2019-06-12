@@ -30,15 +30,15 @@ var preorderTraversal = function(root) {
 };
 
 // 迭代
-var postorderTraversal = function(root) {
+var preorderTraversal = function(root) {
   if(root === null)  return [];
   let res = [];
   let stack = [root];
   while(stack.length) {
     let top = stack.shift();
     res.push(top.val);
-    if(top.left)  stack.unshift(top.left);
     if(top.right)  stack.unshift(top.right);
+    if(top.left)   stack.unshift(top.left);   
   }
-  return res.reverse();
+  return res;
 }

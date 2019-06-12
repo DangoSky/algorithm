@@ -17,13 +17,13 @@
  */
 
 // 递归
-var preorderTraversal = function(root) {
+var postorderTraversal = function(root) {
   let res = [];
   function print(root) {
     if(!root)  return root;
-    res.push(root.val);
     print(root.left);
     print(root.right);
+    res.push(root.val);
   }
   print(root);
   return res;
@@ -36,9 +36,10 @@ var postorderTraversal = function(root) {
   let stack = [root];
   while(stack.length) {
     let top = stack.shift();
-    res.push(top.val);
     if(top.left)  stack.unshift(top.left);
     if(top.right)  stack.unshift(top.right);
+    res.unshift(top.val);
   }
-  return res.reverse();
+  return res;
 }
+
