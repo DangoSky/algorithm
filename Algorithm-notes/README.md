@@ -184,6 +184,10 @@ function insertSort(nums) {
 
 [三种快速排序以及快速排序的优化](https://blog.csdn.net/insistGoGo/article/details/7785038)
 
+应用：TopK问题
+
+[数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
+
 ### 快速排序之填坑
 
 从右边向中间推进的时候，遇到小于基数的数就赋给左边（一开始是基数的位置），右边保留原先的值等之后被左边的值填上。
