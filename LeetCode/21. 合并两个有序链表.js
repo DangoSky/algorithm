@@ -20,11 +20,11 @@ var mergeTwoLists = function(l1, l2) {
   if(!l2)  return l1;
   let ans = new ListNode();
   if(l1.val <= l2.val) {
-    ans.val = l1.val;
+    ans = l1;
     ans.next = mergeTwoLists(l1.next, l2);
   }
   else {
-    ans.val = l2.val;
+    ans = l2;
     ans.next = mergeTwoLists(l1, l2.next);
   }
   return ans;
@@ -32,35 +32,27 @@ var mergeTwoLists = function(l1, l2) {
 
 // 建立一个新链表，循环的次数是l1和l2的长度和
 var mergeTwoLists = function(l1, l2) {
-  if(!l1) {
-    return l2;
-  }
-  else if(!l2) {
-    return l1;
-  }
-  let newList = new ListNode();
+  let newList = new ListNode(0);
   let cur = newList;
-  while(l1 || l2) {
-    let newNode = new ListNode();
-    if(l2 === null || (l1 !== null && l1.val <= l2.val)) {
-      newNode.val = l1.val;
-      newNode.next = null;
+  while(l1 && l2) {
+    if(l1.val <= l2.val) {
+      cur.next = l1;
+      cur = cur.next;
       l1 = l1.next;
-    }
-    else if(l1 === null || (l2 !== null && l2.val < l1.val)) {
-      newNode.val = l2.val;
-      newNode.next = null;
+    } else {
+      cur.next = l2;
+      cur = cur.next;
       l2 = l2.next;
     }
-    if(newList.val === undefined) {
-        newList.val = newNode.val;
-        continue;
-    }
-    cur.next = newNode;
-    cur = cur.next;
   }
-  return newList;
+  if(!l1) {
+    cur.next = l2;
+  } else if(!l2) {
+    cur.next = l1;
+  }
+  return newList.next;
 };
+
 
 // 将l2拼接到l1后面，循环的次数是l2的长度
 var mergeTwoLists = function(l1, l2) {
