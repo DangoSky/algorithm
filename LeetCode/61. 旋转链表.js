@@ -55,32 +55,32 @@ var rotateRight = function(head, k) {
   return ans.next;
 };
 
-
+// 相当于倒数第k个节点（正数第len-k+1个节点）变成了头节点，第len-k个节点变成了尾节点
 var rotateRight = function(head, k) {
-  let cur = head;
-  let len = 0;
-  while(cur) {
-    len++;
-    cur = cur.next;
+  function fn(head) {
+    let len = 0;
+    while(head) {
+      len++;
+      head = head.next;
+    }
+      return len;
   }
-  cur = head;
+
+  if(k === 0) return head;
+  const len = fn(head);
   k = k % len;
-  let index = 0;
-  let pre = cur;
-  let curPre = pre;
-  let after;
-  while(cur) {
+  let newHead = head;
+  let cur = head;
+  for(let i=1; i<=len; i++) {
     let temp = cur.next;
-    if(len - k === index) {
-      after = cur;
-      curPre.next = null;
+    if(i === len-k) {
+      newHead = cur.next;
+      cur.next = null;
     }
-    if(cur.next === null) {
-      cur.next = pre;
-      return after;
+    if(i === len) {
+      cur.next = head;
     }
-    index++;
-    cur = temp;
-    curPre = curPre.next;
+    cur = temp;   
   }
+  return newHead;
 };

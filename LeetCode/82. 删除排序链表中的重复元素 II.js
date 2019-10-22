@@ -48,8 +48,7 @@ var deleteDuplicates = function(head) {
     while(head.next && head.val === head.next.val) {
       head = head.next;
     }
-    head = head.next;
-    return deleteDuplicates(head);
+    return deleteDuplicates(head.next);
   }
   // 每次递归都返回不重复的链表
   head.next = deleteDuplicates(head.next);
