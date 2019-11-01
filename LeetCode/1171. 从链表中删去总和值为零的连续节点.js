@@ -34,7 +34,9 @@
 // 比如以 [1, 2, 3, -3, 4] 为例，其前缀和数组为 [1, 3, 6, 3, 7] ，我们发现有两项均为3，则6和第二个3之间的数是可以消除掉的（包括第二个3）
 var removeZeroSumSublists = function(head) {
   let sum = 0;
+  // 使用map记录前缀和
   let map = new Map();
+  // 针对 [0] 的链表
   let res = new ListNode(0);
   res.next = head;
   let cur = res;
@@ -47,8 +49,10 @@ var removeZeroSumSublists = function(head) {
       let preSum = sum;
       for(let tem = pre.next; tem !== cur.next; tem = tem.next) {
         preSum += tem.val;
+        // 清空中间节点的map记录
         map.set(preSum, undefined);
       }
+      // 保留原先的记录，针对 [0, 0] 的链表
       map.set(sum, pre);
       pre.next = cur.next;
     }

@@ -5,9 +5,11 @@
 */
 
 var maxDepth = function(root) {
-  return root === null ? 0 : Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
-};
-
+  if(root === null) return 0;
+  let l = maxDepth(root.left);
+  let r = maxDepth(root.right);
+  return Math.max(l, r) + 1;
+}
 
 var maxDepth = function(root) {
   if(root === null) {

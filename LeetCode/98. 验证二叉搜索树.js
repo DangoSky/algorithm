@@ -37,15 +37,17 @@
  */
 var isValidBST = function(root) {
   let arr = [];
+  let res = true;
   function fn(root) {
     if(root === null)  return;
     fn(root.left);
+    if(root.val <= arr[arr.length - 1]) {
+      res = false;
+      return false;
+    }
     arr.push(root.val);
     fn(root.right);
   }
   fn(root);
-  for(let i=1, len=arr.length; i<len; i++) {
-    if(arr[i] < arr[i-1])  return false;
-  }
-  return true;
+  return res;
 };
