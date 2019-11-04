@@ -46,3 +46,24 @@ var flatten = function(root) {
   }
   root.right = right;
 };
+
+
+// 1. 左子树插入到右子树的地方
+// 2. 将原来的右子树接到左子树的最右边节点
+// 3. 考虑新的右子树的根节点，一直重复上边的过程，直到新的右子树为 null
+var flatten = function(root) {
+  while(root) {
+    let l = root.left;
+    if (l !== null) {
+      // 获取左子树的最右边节点
+      while(l.right) {
+        l = l.right;
+      }
+      l.right = root.right;
+      root.right = root.left;
+      root.left = null;
+    }
+    root = root.right;
+  }
+  return root;
+}
