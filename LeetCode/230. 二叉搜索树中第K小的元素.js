@@ -50,3 +50,18 @@ var kthSmallest = function(root, k) {
   print(root);
   return res[k-1];
 };
+
+// 不遍历整个二叉树，只遍历到第k小的数
+var kthSmallest = function(root, k) {
+  let res = 0;
+  (function fn(root) {
+    if(root === null || k <= 0) {
+      return;
+    }
+    fn(root.left);
+    res = k > 0 ? root.val : res;
+    k--;
+    fn(root.right);
+  })(root)
+  return res;
+}
