@@ -24,6 +24,8 @@
  * @param {TreeNode} root
  * @return {number[]}
  */
+
+// 只是层次遍历
 var averageOfLevels = function(root) {
   let queue = [];
   queue.push(root);
