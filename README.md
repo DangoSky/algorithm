@@ -1,6 +1,6 @@
 # Leetcode
 
-- 使用 JavaScript [解题](https://leetcode-cn.com/problemset/all/)
+- 使用 JavaScript [解题](https://github.com/DangoSky/algorithm/tree/master/LeetCode)
 
 - [题解](https://github.com/DangoSky/algorithm/blob/master/LeetCode/README.md)
 

@@ -1,6 +1,7 @@
 # 算法思想
 
 + [质数判断和筛选](#质数判断和筛选)
++ [二分查找](#二分查找)
 + [十大排序](#十大排序)
   + [冒泡排序](#冒泡排序)
     + [单向冒泡](#单向冒泡)
@@ -63,6 +64,104 @@ function choosePrimes(n = 10000) {
     }
   }
 }
+```
+
+# 二分查找
+
+
+#### 迭代
+
+第一种写法，右边界初始值取为 `arr.length-1`，搜索区间是一个闭区间（更容易理解）。
+
+```js
+function binarySearch(arr, target) {
+  let left = 0, right = arr.length - 1;
+  while(left <= right) {
+    let mid = parseInt((right - left) / 2) + left;
+    // mid 不使用 parseInt((left + right) / 2) 来计算是为了防止大数相加会溢出
+    if (arr[mid] > target) {
+      right = mid - 1;
+    } else if (arr[mid] < target) {
+      left = mid + 1;
+    } else {
+      return mid;
+    }
+  }
+  return false;
+}
+```
+
+第二种写法，右边界初始值取为 `arr.length`，呈现的搜索区间是左闭右开。
+
+```js
+function binarySearch(arr, target) {
+  let left = 0, right = arr.length;
+  // 因为数组区间是左闭右开的，所以当left===right时，其实区间内已经没有值了
+  while(left < right) {
+    let mid = parseInt((right - left) / 2) + left;
+    if (arr[mid] > target) {
+      // 因为是右开的，所以这里的mid不用像第一种写法那样再-1了，此时的数组搜索区间已经是[left, mid - 1]
+      right = mid;
+    } else if (arr[mid] < target) {
+      left = mid + 1;
+    } else {
+      return mid;
+    }
+  }
+  return false;
+}
+```
+
+#### 递归
+
+```js
+function binarySearch(arr, target) {
+  return (function fn(left, right) {
+    if (left > right) {
+      return false;
+    }
+    let mid = parseInt((right - left) / 2) + left;
+    if (arr[mid] > target) {
+      return fn(left, mid - 1);
+    } else if (arr[mid] < target) {
+      return fn(mid + 1, right);
+    } else {
+      return mid;
+    }
+  })(0, arr.length - 1)
+}
+```
+
+#### 使用二分查找排序数组中元素的第一个和最后一个位置
+
+[Leetcode 传送门](https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/)
+
+```js
+var searchRange = function(nums, target) {
+  // 当turnLeft是true时表示找左边界，为false时表示找右边界
+  function binarySearch(arr, target, turnLeft) {
+    let left = 0, right = arr.length - 1;
+    while(left <= right) {
+      let mid = parseInt((right - left) / 2) + left;
+      // 如果当前的数组元素是target并且是要找左边界，则将右边界置为mid-1，并向左边迭代。
+      // 如果此时arr[mid]就是左数第一个target了，那么循环结束后找不到target，left也会加1回到此时的mid
+      if (arr[mid] > target || (turnLeft && arr[mid] === target)) {
+        right = mid - 1;
+      } else {
+        left = mid + 1;
+      }
+    }
+    return left;
+  }
+  function judge(index) {
+    return nums[index] === target ? index : -1;
+  }
+
+  let indexLeft = judge(binarySearch(nums, target, true));
+  // 找右边界时，当退出循环的时候，左边的部分都大于或等于target，所以需要将下标-1
+  let indexRight = judge(binarySearch(nums, target, false) - 1);
+  return [indexLeft, indexRight];
+};
 ```
 
 # 十大排序
