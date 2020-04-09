@@ -185,7 +185,8 @@ function bubbleSort(nums) {
   for(let i=0, len=nums.length; i<len-1; i++) {
     // 如果一轮比较中没有需要交换的数据，则说明数组已经有序。主要是对[5,1,2,3,4]之类的数组进行优化
     let mark = true;
-    for(let j=0; j<len-i-1; j++) {
+    // i 表示已经排好序的个数，所以只需要循环 len-1-i 次
+    for(let j=0; j<len-1-i; j++) {
       if(nums[j] > nums[j+1]) {
         [nums[j], nums[j+1]] = [nums[j+1], nums[j]];
         mark = false;
@@ -239,6 +240,7 @@ function bubbleSort_twoWays(nums) {
 function selectSort(nums) {
   for(let i=0, len=nums.length; i<len; i++) {
     for(let j=i+1; j<len; j++) {
+      // 将 nums[i] 和它后面的元素进行比较，使 nums[i] 一直维持最小
       if(nums[i] > nums[j]) {
         [nums[i], nums[j]] = [nums[j], nums[i]];
       }
@@ -260,7 +262,7 @@ function insertSort(nums) {
   for(let i=1, len=nums.length; i<len; i++) {
     let temp = nums[i];
     let j = i;
-    while(j >= 0 && temp < nums[j-1]) {
+    while(j > 0 && temp < nums[j-1]) {
       nums[j] = nums[j-1];
       j--;
     }
@@ -289,7 +291,7 @@ function insertSort(nums) {
 
 ### 快速排序之填坑
 
-从右边向中间推进的时候，遇到小于基数的数就赋给左边（一开始是基数的位置），右边保留原先的值等之后被左边的值填上。
+默认取第一个数作为基数，所以先从右边向中间推。遇到小于基数的数就赋给左边的坑位（一开始是基数的位置），而这个小于基数的数则由基数填上，这样基数右边的数就都大于基数了。右边保留原先的值等之后被左边的值填上。
 
 ```js
 function quickSort(nums) {
@@ -306,6 +308,7 @@ function quickSort(nums) {
     // 取第一个数为基数
     let temp = arr[left];
     while(left < right) {
+      // 因为是取第一书记作为IE
       while(left < right && arr[right] >= temp)  right--;
       arr[left] = arr[right];
       while(left < right && arr[left] < temp)  left++;
@@ -356,7 +359,7 @@ function quickSort1(nums) {
 
 ## 归并排序
 
-递归将数组分为两个序列，有序合并这两个序列。
+递归将数组平分为两个序列，并有序合并这两个序列。
 
 + 最好：`O(n * logn)`
 + 最坏：`O(n * logn)`
