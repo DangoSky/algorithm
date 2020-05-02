@@ -32,3 +32,15 @@ var minCostClimbingStairs = function(cost) {
   }
   return Math.min(lastLast, last);
 }
+
+// 和普通的爬楼梯一样，但最后需要判断从第 n 层到阶梯顶的，和从第 n-1 层到阶梯顶哪个花费更少（如示例一）
+var minCostClimbingStairs = function(cost) {
+  const res = [];
+  res[0] = cost[0];
+  res[1] = cost[1];
+  const len = cost.length;
+  for(let i=2; i<len; i++) {
+    res[i] = cost[i] + Math.min(res[i-1], res[i-2]);
+  }
+  return Math.min(res[len-1], res[len-2]);
+}
