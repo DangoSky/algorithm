@@ -10,6 +10,10 @@
 
 总结一些[算法思想](https://github.com/DangoSky/algorithm/tree/master/Algorithm-notes#%E7%AE%97%E6%B3%95%E6%80%9D%E6%83%B3)
 
+# 剑指 Offer
+
+[题解](https://github.com/DangoSky/algorithm/tree/master/%E5%89%91%E6%8C%87Offer)
+
 # DataStructure-homework
 
 + 使用 JavaScript 完成数据结构课本的课后算法设计题
