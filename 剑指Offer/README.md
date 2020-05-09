@@ -87,7 +87,7 @@
 0 <= 链表长度 <= 10000
 ```
 
-[题解：]()
+[题解：](https://github.com/DangoSky/algorithm/blob/master/%E5%89%91%E6%8C%87Offer/%E9%9D%A2%E8%AF%95%E9%A2%9806.%20%E4%BB%8E%E5%B0%BE%E5%88%B0%E5%A4%B4%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8.js)
 
 1. 先构造双向链表再从后向前遍历链表打印。
 
@@ -116,7 +116,7 @@
 最多会对 appendTail、deleteHead 进行 10000 次调用
 ```
 
-[题解：]()
+[题解：](https://github.com/DangoSky/algorithm/blob/master/%E5%89%91%E6%8C%87Offer/%E9%9D%A2%E8%AF%95%E9%A2%9809.%20%E7%94%A8%E4%B8%A4%E4%B8%AA%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97.js)
 
 1. 把 arr1 和 arr2 当做是两个栈，后进先出，所以只能使用 push 和 pop 方法。入队的时候，都将数据放到 arr1 里面。出队的时候，如果 arr2 为空，就将 arr1 的所有元素 pop 到 arr2 中，这样 arr2 中的数据顺序就符合先进先出了；如果 arr2 不为空，就直接从 arr2 里取数据，这样就不用每次出队都将 arr1 里的数据放到 arr2 里。
 
@@ -142,7 +142,7 @@ F(N) = F(N - 1) + F(N - 2), 其中 N > 1.
 0 <= n <= 100
 ```
 
-[题解：]()
+[题解：](https://github.com/DangoSky/algorithm/blob/master/%E5%89%91%E6%8C%87Offer/%E9%9D%A2%E8%AF%95%E9%A2%9810-%20I.%20%E6%96%90%E6%B3%A2%E9%82%A3%E5%A5%91%E6%95%B0%E5%88%97.js)
 
 1. 单纯递归，会超时。时间复杂度 O(n^2)，空间复杂度 O(1)。
 
