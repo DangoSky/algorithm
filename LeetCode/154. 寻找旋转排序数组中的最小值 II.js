@@ -20,6 +20,8 @@
  * @param {number[]} nums
  * @return {number}
  */
+
+//  题解参考 https://github.com/DangoSky/algorithm/blob/master/%E5%89%91%E6%8C%87Offer/%E9%9D%A2%E8%AF%95%E9%A2%9811.%20%E6%97%8B%E8%BD%AC%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%B0%8F%E6%95%B0%E5%AD%97.js
 var findMin = function(nums) {
   for(let i=1; i<nums.length; i++) {
     if (nums[i] < nums[i-1]) {

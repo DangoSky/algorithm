@@ -33,9 +33,8 @@ var minArray = function(numbers) {
 // 等于的话只需 r-- 舍弃掉 numbers[r]，因为 r-- 后旋转点还是在 [l, r] 上。
 // 需要注意的是（采坑了 Orz）
 // 不能将 numbers[mid] 和 numbers[l] 比较，因为两者比较无法得出 numbers[mid] 是在左子数组还是在右子数组。
-// 例如 [3, 4, 5, 1, 2] 与 [1, 2, 3, 4, 5]，numbers[mid] 都大于 numbers[l]，但最小值一个在后面，一个在前面
+// 例如 [3, 4, 5, 1, 2] 与 [1, 2, 3, 4, 5]，numbers[mid] 都大于 numbers[l]，但最小值一个在后面，一个在前面。
 
-// 用右边位置 right 和中间位置 
 var minArray = function(numbers) {
   let l = 0, r = numbers.length - 1;
   while(l < r) {

@@ -167,7 +167,7 @@ F(N) = F(N - 1) + F(N - 2), 其中 N > 1.
 输出：0
 ```
 
-[题解：]()
+[题解：](https://github.com/DangoSky/algorithm/blob/master/%E5%89%91%E6%8C%87Offer/%E9%9D%A2%E8%AF%95%E9%A2%9811.%20%E6%97%8B%E8%BD%AC%E6%95%B0%E7%BB%84%E7%9A%84%E6%9C%80%E5%B0%8F%E6%95%B0%E5%AD%97.js)
 
 1. 直接循环判断 `numbers[i]` 是否会小于 `numbers[i-1]`，是的话就是旋转点。时间复杂度为 O(n)。
 
@@ -181,7 +181,7 @@ F(N) = F(N - 1) + F(N - 2), 其中 N > 1.
 
 等于的话只需 `r--` 舍弃掉 `numbers[r]`，因为 `r--` 后旋转点还是在 `[l, r]` 上。
 
-需要注意的是（采坑了 Orz），不能将 `numbers[mid]` 和 `numbers[l]` 比较，因为两者比较无法得出 `numbers[mid]` 是在左子数组还是在右子数组。例如 `[3, 4, 5, 1, 2]` 与 `[1, 2, 3, 4, 5]`，`numbers[mid]` 都大于 `numbers[l]`，但最小值一个在后面，一个在前面
+需要注意的是（采坑了 Orz），不能将 `numbers[mid]` 和 `numbers[l]` 比较，因为两者比较无法得出 `numbers[mid]` 是在左子数组还是在右子数组。例如 `[3, 4, 5, 1, 2]` 与 `[1, 2, 3, 4, 5]`，`numbers[mid]` 都大于 `numbers[l]`，但最小值一个在后面，一个在前面。
 
 
 ### 
